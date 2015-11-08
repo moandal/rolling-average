@@ -19,7 +19,7 @@ todo Add settings
 todo Store last 100 readings
 todo Show last 100 readings
 todo Allow editing of previous readings
-todo Commit changes
+todo Localise dates
 */
 
 public class MainActivity extends AppCompatActivity {
