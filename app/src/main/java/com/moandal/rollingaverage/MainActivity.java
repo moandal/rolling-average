@@ -1,7 +1,9 @@
 package com.moandal.rollingaverage;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -110,63 +112,105 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_erase:
-                TextView textAverage = (TextView) findViewById(R.id.textAverage);
-                EditText editWeight = (EditText) findViewById(R.id.editWeight);
-                TextView textHist1 = (TextView) findViewById(R.id.textHist1);
-                TextView textHist2 = (TextView) findViewById(R.id.textHist2);
-                TextView textHist3 = (TextView) findViewById(R.id.textHist3);
-                TextView textHist4 = (TextView) findViewById(R.id.textHist4);
-                TextView textHist5 = (TextView) findViewById(R.id.textHist5);
-                TextView textHist6 = (TextView) findViewById(R.id.textHist6);
-                TextView textHist7 = (TextView) findViewById(R.id.textHist7);
-                TextView textHAv1 = (TextView) findViewById(R.id.textHAv1);
-                TextView textHAv2 = (TextView) findViewById(R.id.textHAv2);
-                TextView textHAv3 = (TextView) findViewById(R.id.textHAv3);
-                TextView textHAv4 = (TextView) findViewById(R.id.textHAv4);
-                TextView textHAv5 = (TextView) findViewById(R.id.textHAv5);
-                TextView textHAv6 = (TextView) findViewById(R.id.textHAv6);
-                TextView textHAv7 = (TextView) findViewById(R.id.textHAv7);
-                TextView textHDt1 = (TextView) findViewById(R.id.textHDt1);
-                TextView textHDt2 = (TextView) findViewById(R.id.textHDt2);
-                TextView textHDt3 = (TextView) findViewById(R.id.textHDt3);
-                TextView textHDt4 = (TextView) findViewById(R.id.textHDt4);
-                TextView textHDt5 = (TextView) findViewById(R.id.textHDt5);
-                TextView textHDt6 = (TextView) findViewById(R.id.textHDt6);
-                TextView textHDt7 = (TextView) findViewById(R.id.textHDt7);
-                rollingAverage = 0;
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                TextView textAverage = (TextView) findViewById(R.id.textAverage);
+                                EditText editWeight = (EditText) findViewById(R.id.editWeight);
+                                TextView textHist1 = (TextView) findViewById(R.id.textHist1);
+                                TextView textHist2 = (TextView) findViewById(R.id.textHist2);
+                                TextView textHist3 = (TextView) findViewById(R.id.textHist3);
+                                TextView textHist4 = (TextView) findViewById(R.id.textHist4);
+                                TextView textHist5 = (TextView) findViewById(R.id.textHist5);
+                                TextView textHist6 = (TextView) findViewById(R.id.textHist6);
+                                TextView textHist7 = (TextView) findViewById(R.id.textHist7);
+                                TextView textHAv1 = (TextView) findViewById(R.id.textHAv1);
+                                TextView textHAv2 = (TextView) findViewById(R.id.textHAv2);
+                                TextView textHAv3 = (TextView) findViewById(R.id.textHAv3);
+                                TextView textHAv4 = (TextView) findViewById(R.id.textHAv4);
+                                TextView textHAv5 = (TextView) findViewById(R.id.textHAv5);
+                                TextView textHAv6 = (TextView) findViewById(R.id.textHAv6);
+                                TextView textHAv7 = (TextView) findViewById(R.id.textHAv7);
+                                TextView textHDt1 = (TextView) findViewById(R.id.textHDt1);
+                                TextView textHDt2 = (TextView) findViewById(R.id.textHDt2);
+                                TextView textHDt3 = (TextView) findViewById(R.id.textHDt3);
+                                TextView textHDt4 = (TextView) findViewById(R.id.textHDt4);
+                                TextView textHDt5 = (TextView) findViewById(R.id.textHDt5);
+                                TextView textHDt6 = (TextView) findViewById(R.id.textHDt6);
+                                TextView textHDt7 = (TextView) findViewById(R.id.textHDt7);
+                                rollingAverage = 0;
 
-                Arrays.fill(readings, 0);
-                Arrays.fill(rollingAvs, 0);
-                Arrays.fill(readDates, new Date());
+                                Arrays.fill(readings, 0);
+                                Arrays.fill(rollingAvs, 0);
+                                Arrays.fill(readDates, new Date());
 
-                textAverage.setText(Double.toString(rollingAverage));
-                textHist1.setText(Double.toString(readings[0]));
-                textHist2.setText(Double.toString(readings[1]));
-                textHist3.setText(Double.toString(readings[2]));
-                textHist4.setText(Double.toString(readings[3]));
-                textHist5.setText(Double.toString(readings[4]));
-                textHist6.setText(Double.toString(readings[5]));
-                textHist7.setText(Double.toString(readings[6]));
-                textHAv1.setText(Double.toString(rollingAvs[0]));
-                textHAv2.setText(Double.toString(rollingAvs[1]));
-                textHAv3.setText(Double.toString(rollingAvs[2]));
-                textHAv4.setText(Double.toString(rollingAvs[3]));
-                textHAv5.setText(Double.toString(rollingAvs[4]));
-                textHAv6.setText(Double.toString(rollingAvs[5]));
-                textHAv7.setText(Double.toString(rollingAvs[6]));
-                textHDt1.setText(formatter.format(readDates[0]));
-                textHDt2.setText(formatter.format(readDates[1]));
-                textHDt3.setText(formatter.format(readDates[2]));
-                textHDt4.setText(formatter.format(readDates[3]));
-                textHDt5.setText(formatter.format(readDates[4]));
-                textHDt6.setText(formatter.format(readDates[5]));
-                textHDt7.setText(formatter.format(readDates[6]));
+                                textAverage.setText(Double.toString(rollingAverage));
+                                textHist1.setText(Double.toString(readings[0]));
+                                textHist2.setText(Double.toString(readings[1]));
+                                textHist3.setText(Double.toString(readings[2]));
+                                textHist4.setText(Double.toString(readings[3]));
+                                textHist5.setText(Double.toString(readings[4]));
+                                textHist6.setText(Double.toString(readings[5]));
+                                textHist7.setText(Double.toString(readings[6]));
+                                textHAv1.setText(Double.toString(rollingAvs[0]));
+                                textHAv2.setText(Double.toString(rollingAvs[1]));
+                                textHAv3.setText(Double.toString(rollingAvs[2]));
+                                textHAv4.setText(Double.toString(rollingAvs[3]));
+                                textHAv5.setText(Double.toString(rollingAvs[4]));
+                                textHAv6.setText(Double.toString(rollingAvs[5]));
+                                textHAv7.setText(Double.toString(rollingAvs[6]));
+                                textHDt1.setText(formatter.format(readDates[0]));
+                                textHDt2.setText(formatter.format(readDates[1]));
+                                textHDt3.setText(formatter.format(readDates[2]));
+                                textHDt4.setText(formatter.format(readDates[3]));
+                                textHDt5.setText(formatter.format(readDates[4]));
+                                textHDt6.setText(formatter.format(readDates[5]));
+                                textHDt7.setText(formatter.format(readDates[6]));
+
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                // No button clicked
+                                // do nothing
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Are you sure?")
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
 
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void alertMessage() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        // Yes button clicked
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        // No button clicked
+                        // do nothing
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure?")
+                .setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+    }
+
 
     private void saveData() {
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
