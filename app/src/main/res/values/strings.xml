@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Rolling Average</string>
+    <string name="menu_erase">Erase all data</string>
+</resources>
