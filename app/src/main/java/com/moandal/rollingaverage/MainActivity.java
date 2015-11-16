@@ -1,6 +1,5 @@
 package com.moandal.rollingaverage;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,8 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -52,49 +49,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayData() {
+        String Hist1 = Double.toString(readings[0]);
+        String Hav1 = Double.toString(rollingAvs[0]);
+        String HDt1 = formatter.format(readDates[0]);
+
         TextView textHist1 = (TextView) findViewById(R.id.textHist1);
-        TextView textHist2 = (TextView) findViewById(R.id.textHist2);
-        TextView textHist3 = (TextView) findViewById(R.id.textHist3);
-        TextView textHist4 = (TextView) findViewById(R.id.textHist4);
-        TextView textHist5 = (TextView) findViewById(R.id.textHist5);
-        TextView textHist6 = (TextView) findViewById(R.id.textHist6);
-        TextView textHist7 = (TextView) findViewById(R.id.textHist7);
         TextView textHAv1 = (TextView) findViewById(R.id.textHAv1);
-        TextView textHAv2 = (TextView) findViewById(R.id.textHAv2);
-        TextView textHAv3 = (TextView) findViewById(R.id.textHAv3);
-        TextView textHAv4 = (TextView) findViewById(R.id.textHAv4);
-        TextView textHAv5 = (TextView) findViewById(R.id.textHAv5);
-        TextView textHAv6 = (TextView) findViewById(R.id.textHAv6);
-        TextView textHAv7 = (TextView) findViewById(R.id.textHAv7);
         TextView textHDt1 = (TextView) findViewById(R.id.textHDt1);
-        TextView textHDt2 = (TextView) findViewById(R.id.textHDt2);
-        TextView textHDt3 = (TextView) findViewById(R.id.textHDt3);
-        TextView textHDt4 = (TextView) findViewById(R.id.textHDt4);
-        TextView textHDt5 = (TextView) findViewById(R.id.textHDt5);
-        TextView textHDt6 = (TextView) findViewById(R.id.textHDt6);
-        TextView textHDt7 = (TextView) findViewById(R.id.textHDt7);
         TextView textAverage = (TextView) findViewById(R.id.textAverage);
-        textHist1.setText(Double.toString(readings[0]));
-        textHist2.setText(Double.toString(readings[1]));
-        textHist3.setText(Double.toString(readings[2]));
-        textHist4.setText(Double.toString(readings[3]));
-        textHist5.setText(Double.toString(readings[4]));
-        textHist6.setText(Double.toString(readings[5]));
-        textHist7.setText(Double.toString(readings[6]));
-        textHAv1.setText(Double.toString(rollingAvs[0]));
-        textHAv2.setText(Double.toString(rollingAvs[1]));
-        textHAv3.setText(Double.toString(rollingAvs[2]));
-        textHAv4.setText(Double.toString(rollingAvs[3]));
-        textHAv5.setText(Double.toString(rollingAvs[4]));
-        textHAv6.setText(Double.toString(rollingAvs[5]));
-        textHAv7.setText(Double.toString(rollingAvs[6]));
-        textHDt1.setText(formatter.format(readDates[0]));
-        textHDt2.setText(formatter.format(readDates[1]));
-        textHDt3.setText(formatter.format(readDates[2]));
-        textHDt4.setText(formatter.format(readDates[3]));
-        textHDt5.setText(formatter.format(readDates[4]));
-        textHDt6.setText(formatter.format(readDates[5]));
-        textHDt7.setText(formatter.format(readDates[6]));
+
+        for (int i = 1; i < readings.length; i++) {
+            Hist1 += "\n" + Double.toString(readings[i]);
+            Hav1 += "\n" + Double.toString(rollingAvs[i]);
+            HDt1 += "\n" + formatter.format(readDates[i]);
+        }
+
+        textHist1.setText(Hist1);
+        textHAv1.setText(Hav1);
+        textHDt1.setText(HDt1);
         textAverage.setText(Double.toString(rollingAverage));
     }
 
@@ -148,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    //TODO Put save and load data in a loop
 
     private void saveData() {
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
