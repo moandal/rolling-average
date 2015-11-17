@@ -20,8 +20,7 @@ import java.util.Date;
 
 /*
 todo Allow change of number to average over
-todo Store last 100 readings
-todo Show last 100 readings
+todo Allow change of decimal places
 todo Allow editing of previous readings
 todo Localise dates
 */
@@ -30,9 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
     double rollingAverage;
     int rollingNumber = 7;
-    double[] readings = new double[7];
-    double[] rollingAvs = new double[7];
-    Date[] readDates = new Date[7];
+    double[] readings = new double[100];
+    double[] rollingAvs = new double[100];
+    Date[] readDates = new Date[100];
     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
     public Date convertStringToDate(String dateString)
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         TextView textHDt1 = (TextView) findViewById(R.id.textHDt1);
         TextView textAverage = (TextView) findViewById(R.id.textAverage);
 
-        for (int i = 1; i < readings.length; i++) {
+        for (int i = 1; i < rollingNumber; i++) {
             Hist1 += "\n" + Double.toString(readings[i]);
             Hav1 += "\n" + Double.toString(rollingAvs[i]);
             HDt1 += "\n" + formatter.format(readDates[i]);
@@ -126,54 +125,22 @@ public class MainActivity extends AppCompatActivity {
     private void saveData() {
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("Weight0", Double.toString(readings[0]));
-        editor.putString("Weight1", Double.toString(readings[1]));
-        editor.putString("Weight2", Double.toString(readings[2]));
-        editor.putString("Weight3", Double.toString(readings[3]));
-        editor.putString("Weight4", Double.toString(readings[4]));
-        editor.putString("Weight5", Double.toString(readings[5]));
-        editor.putString("Weight6", Double.toString(readings[6]));
-        editor.putString("rollingAvs0", Double.toString(rollingAvs[0]));
-        editor.putString("rollingAvs1", Double.toString(rollingAvs[1]));
-        editor.putString("rollingAvs2", Double.toString(rollingAvs[2]));
-        editor.putString("rollingAvs3", Double.toString(rollingAvs[3]));
-        editor.putString("rollingAvs4", Double.toString(rollingAvs[4]));
-        editor.putString("rollingAvs5", Double.toString(rollingAvs[5]));
-        editor.putString("rollingAvs6", Double.toString(rollingAvs[6]));
-        editor.putString("readDates0", formatter.format(readDates[0]));
-        editor.putString("readDates1", formatter.format(readDates[1]));
-        editor.putString("readDates2", formatter.format(readDates[2]));
-        editor.putString("readDates3", formatter.format(readDates[3]));
-        editor.putString("readDates4", formatter.format(readDates[4]));
-        editor.putString("readDates5", formatter.format(readDates[5]));
-        editor.putString("readDates6", formatter.format(readDates[6]));
+        for (int i = 0; i < rollingNumber; i++) {
+            editor.putString("Weight" + i, Double.toString(readings[i]));
+            editor.putString("rollingAvs" + i, Double.toString(rollingAvs[i]));
+            editor.putString("readDates" + i, formatter.format(readDates[i]));
+        }
         editor.putString("RollingAverage", Double.toString(rollingAverage));
         editor.commit();
     }
 
     private void loadData() {
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        readings[0] = Double.valueOf(sp.getString("Weight0","0"));
-        readings[1] = Double.valueOf(sp.getString("Weight1","0"));
-        readings[2] = Double.valueOf(sp.getString("Weight2","0"));
-        readings[3] = Double.valueOf(sp.getString("Weight3","0"));
-        readings[4] = Double.valueOf(sp.getString("Weight4","0"));
-        readings[5] = Double.valueOf(sp.getString("Weight5","0"));
-        readings[6] = Double.valueOf(sp.getString("Weight6","0"));
-        rollingAvs[0] = Double.valueOf(sp.getString("rollingAvs0","0"));
-        rollingAvs[1] = Double.valueOf(sp.getString("rollingAvs1","0"));
-        rollingAvs[2] = Double.valueOf(sp.getString("rollingAvs2","0"));
-        rollingAvs[3] = Double.valueOf(sp.getString("rollingAvs3","0"));
-        rollingAvs[4] = Double.valueOf(sp.getString("rollingAvs4","0"));
-        rollingAvs[5] = Double.valueOf(sp.getString("rollingAvs5","0"));
-        rollingAvs[6] = Double.valueOf(sp.getString("rollingAvs6","0"));
-        readDates[0] = convertStringToDate(sp.getString("readDates0","0"));
-        readDates[1] = convertStringToDate(sp.getString("readDates1","0"));
-        readDates[2] = convertStringToDate(sp.getString("readDates2","0"));
-        readDates[3] = convertStringToDate(sp.getString("readDates3","0"));
-        readDates[4] = convertStringToDate(sp.getString("readDates4","0"));
-        readDates[5] = convertStringToDate(sp.getString("readDates5","0"));
-        readDates[6] = convertStringToDate(sp.getString("readDates6", "0"));
+        for (int i = 0; i < rollingNumber; i++) {
+            readings[i] = Double.valueOf(sp.getString("Weight" + i, "0"));
+            rollingAvs[i] = Double.valueOf(sp.getString("rollingAvs" + i, "0"));
+            readDates[i] = convertStringToDate(sp.getString("readDates" + i, "0"));
+        }
         rollingAverage = Double.valueOf(sp.getString("RollingAverage","0"));
     }
 
@@ -195,8 +162,14 @@ public class MainActivity extends AppCompatActivity {
         String message = editWeight.getText().toString();
         double inputValue = Double.valueOf(message);
         rollingAverage = 0;
-        /*todo Fix initialisation bug below */
-        if (readings[6] == 0) {
+        Boolean init = true;
+        for (int i = 0; i < rollingNumber; i++) {
+            if (readings[i] != 0) {
+                init = false;
+            }
+        }
+
+        if (init) {
             Arrays.fill(readings, inputValue);
             Arrays.fill(rollingAvs, inputValue);
             Arrays.fill(readDates, new Date());
@@ -207,7 +180,9 @@ public class MainActivity extends AppCompatActivity {
                 readings[i] = readings[i-1];
                 rollingAvs[i] = rollingAvs[i-1];
                 readDates[i] = readDates[i-1];
-                rollingAverage = rollingAverage + readings[i];
+                if (i < rollingNumber) {
+                    rollingAverage = rollingAverage + readings[i];
+                }
             }
             readings[0] = inputValue;
             rollingAverage = Math.round(((rollingAverage + readings[0]) / rollingNumber) * 100);
