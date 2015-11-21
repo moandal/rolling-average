@@ -115,12 +115,16 @@ public class MainActivity extends AppCompatActivity {
                         .setNegativeButton("No", dialogClickListener).show();
 
                 return true;
+
+            case R.id.settings:
+
+                Toast.makeText(this, "Settings not coded yet", Toast.LENGTH_LONG).show();
+                return true;
+
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-    //TODO Put save and load data in a loop
 
     private void saveData() {
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);

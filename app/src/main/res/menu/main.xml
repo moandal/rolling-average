@@ -35,4 +35,9 @@
         android:title="@string/menu_erase"
         support:showAsAction="never"/>
 
+    <item
+        android:id="@+id/settings"
+        android:title="@string/settings"
+        support:showAsAction="never"/>
+
 </menu>
