@@ -3,8 +3,10 @@ package com.moandal.rollingaverage;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
@@ -19,8 +21,6 @@ import java.util.Arrays;
 import java.util.Date;
 
 /*
-todo Allow change of number to average over
-todo Allow change of decimal places
 todo Allow editing of previous readings
 todo Localise dates
 */
@@ -28,7 +28,8 @@ todo Localise dates
 public class MainActivity extends AppCompatActivity {
 
     double rollingAverage;
-    int rollingNumber = 7;
+    int rollingNumber;
+    int decimalPlaces;
     double[] readings = new double[100];
     double[] rollingAvs = new double[100];
     Date[] readDates = new Date[100];
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         textHAv1.setText(Hav1);
         textHDt1.setText(HDt1);
         textAverage.setText(Double.toString(rollingAverage));
+
     }
 
     @Override
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate our menu from the resources by using the menu inflater.
+
         getMenuInflater().inflate(R.menu.main, menu);
 
         return true;
@@ -102,8 +104,7 @@ public class MainActivity extends AppCompatActivity {
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
-                                // No button clicked
-                                // do nothing
+                                // No button clicked so do nothing
                                 break;
                         }
                     }
@@ -118,7 +119,9 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.settings:
 
-                Toast.makeText(this, "Settings not coded yet", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+
                 return true;
 
         }
@@ -139,6 +142,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadData() {
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        rollingNumber = Integer.parseInt(preferences.getString("rolling_number", "7"));
+        decimalPlaces = Integer.parseInt(preferences.getString("decimal_places", "2"));
+
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         for (int i = 0; i < rollingNumber; i++) {
             readings[i] = Double.valueOf(sp.getString("Weight" + i, "0"));
@@ -162,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
     /** Called when the user clicks the Send button */
     public void showAverage(View view) {
+
         EditText editWeight = (EditText) findViewById(R.id.editWeight);
         String message = editWeight.getText().toString();
         double inputValue = Double.valueOf(message);
@@ -188,9 +197,11 @@ public class MainActivity extends AppCompatActivity {
                     rollingAverage = rollingAverage + readings[i];
                 }
             }
+
             readings[0] = inputValue;
-            rollingAverage = Math.round(((rollingAverage + readings[0]) / rollingNumber) * 100);
-            rollingAverage = rollingAverage / 100;
+            double multiplyer = Math.pow(10, decimalPlaces);
+            rollingAverage = Math.round(((rollingAverage + readings[0]) / rollingNumber) * multiplyer);
+            rollingAverage = rollingAverage / multiplyer;
             rollingAvs[0] = rollingAverage;
             readDates[0] = new Date();
         }
