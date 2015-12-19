@@ -18,4 +18,9 @@
         android:title="@string/settings"
         support:showAsAction="never"/>
 
+    <item
+        android:id="@+id/edit_data"
+        android:title="@string/edit_data"
+        support:showAsAction="never"/>
+
 </menu>

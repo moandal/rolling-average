@@ -124,6 +124,13 @@ public class MainActivity extends AppCompatActivity {
 
                 return true;
 
+            case R.id.edit_data:
+
+                Intent intent_Edit = new Intent(this, EditActivity.class);
+                startActivity(intent_Edit);
+
+                return true;
+
         }
 
         return super.onOptionsItemSelected(item);
