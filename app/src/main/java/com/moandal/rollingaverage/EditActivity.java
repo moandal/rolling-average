@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,6 +25,8 @@ public class EditActivity extends AppCompatActivity {
     double[] rollingAvs = new double[100];
     Date[] readDates = new Date[100];
     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+    EditText[] textEdRead = new EditText[100];
+    EditText[] textEdDate = new EditText[100];
 
     public Date convertStringToDate(String dateString)
     {
@@ -95,32 +98,27 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void displayData() {
-        String Hist1 = Double.toString(readings[0]);
-        String Hav1 = Double.toString(rollingAvs[0]);
-        String HDt1 = formatter.format(readDates[0]);
-
-        for (int i = 1; i < rollingNumber; i++) {
-            Hist1 += "\n" + Double.toString(readings[i]);
-            Hav1 += "\n" + Double.toString(rollingAvs[i]);
-            HDt1 += "\n" + formatter.format(readDates[i]);
-        }
 
         LinearLayout linLayReading = (LinearLayout) findViewById(R.id.linLayReading);
         LinearLayout.LayoutParams linLayReadingparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        TextView textEdHist1 = new TextView(this);
-        textEdHist1.setLayoutParams(linLayReadingparams);
-        textEdHist1.setText(Hist1);
-        linLayReading.addView(textEdHist1);
 
-/*        TextView textHist1 = (TextView) findViewById(R.id.textEdHist1);
-        TextView textHAv1 = (TextView) findViewById(R.id.textEdHAv1);
-        TextView textHDt1 = (TextView) findViewById(R.id.textEdHDt1);
+        LinearLayout linLayDate = (LinearLayout) findViewById(R.id.linLayDate);
+        LinearLayout.LayoutParams linLayDateparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        textHist1.setText(Hist1);
-        textHAv1.setText(Hav1);
-        textHDt1.setText(HDt1);*/
+        for (int i = 0; i < rollingNumber; i++) {
+
+            textEdRead[i] = new EditText(this);
+            textEdRead[i].setLayoutParams(linLayReadingparams);
+            textEdRead[i].setText(Double.toString(readings[i]));
+            linLayReading.addView(textEdRead[i]);
+
+            textEdDate[i] = new EditText(this);
+            textEdDate[i].setLayoutParams(linLayDateparams);
+            textEdDate[i].setText(formatter.format(readDates[i]));
+            linLayDate.addView(textEdDate[i]);
+
+        }
 
     }
-
 
 }
