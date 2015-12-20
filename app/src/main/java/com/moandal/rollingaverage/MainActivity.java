@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveData() {
+    public void saveData() {
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         for (int i = 0; i < rollingNumber; i++) {
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    private void loadData() {
+    public void loadData() {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         rollingNumber = Integer.parseInt(preferences.getString("rolling_number", "7"));
