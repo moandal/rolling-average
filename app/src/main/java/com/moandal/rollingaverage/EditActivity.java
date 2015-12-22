@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -110,14 +111,18 @@ public class EditActivity extends AppCompatActivity {
             textEdRead[i] = new EditText(this);
             textEdRead[i].setLayoutParams(linLayReadingparams);
             textEdRead[i].setText(Double.toString(readings[i]));
+            textEdRead[i].setInputType(InputType.TYPE_CLASS_NUMBER);
             linLayReading.addView(textEdRead[i]);
 
             textEdDate[i] = new EditText(this);
             textEdDate[i].setLayoutParams(linLayDateparams);
             textEdDate[i].setText(formatter.format(readDates[i]));
+            textEdDate[i].setInputType(InputType.TYPE_CLASS_DATETIME);
             linLayDate.addView(textEdDate[i]);
 
         }
+        
+        //// TODO: 22/12/2015 Validate and store data 
 
     }
 
