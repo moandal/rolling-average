@@ -206,9 +206,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             readings[0] = inputValue;
-            double multiplyer = Math.pow(10, decimalPlaces);
-            rollingAverage = Math.round(((rollingAverage + readings[0]) / rollingNumber) * multiplyer);
-            rollingAverage = rollingAverage / multiplyer;
+            double multiplier = Math.pow(10, decimalPlaces);
+            rollingAverage = Math.round(((rollingAverage + readings[0]) / rollingNumber) * multiplier);
+            rollingAverage = rollingAverage / multiplier;
             rollingAvs[0] = rollingAverage;
             readDates[0] = new Date();
         }

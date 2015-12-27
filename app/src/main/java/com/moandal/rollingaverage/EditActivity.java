@@ -8,13 +8,18 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 
 public class EditActivity extends AppCompatActivity {
@@ -32,12 +37,19 @@ public class EditActivity extends AppCompatActivity {
     public Date convertStringToDate(String dateString)
     {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        formatter.setLenient(false);
         Date formatteddate = new Date();
+
         try{
             formatteddate = formatter.parse(dateString);
         }
         catch(ParseException e){
-            e.printStackTrace();
+            try{
+                formatteddate = formatter.parse("01/01/1900");
+            }
+            catch(ParseException f){
+                f.printStackTrace();
+            }
         }
         return formatteddate;
     }
@@ -112,18 +124,77 @@ public class EditActivity extends AppCompatActivity {
             textEdRead[i].setLayoutParams(linLayReadingparams);
             textEdRead[i].setText(Double.toString(readings[i]));
             textEdRead[i].setInputType(InputType.TYPE_CLASS_NUMBER);
+            textEdRead[i].setId(i);
             linLayReading.addView(textEdRead[i]);
 
             textEdDate[i] = new EditText(this);
             textEdDate[i].setLayoutParams(linLayDateparams);
             textEdDate[i].setText(formatter.format(readDates[i]));
             textEdDate[i].setInputType(InputType.TYPE_CLASS_DATETIME);
+            textEdDate[i].setId(i);
             linLayDate.addView(textEdDate[i]);
 
         }
         
-        //// TODO: 22/12/2015 Validate and store data 
+    }
+
+    public void recalcAvs() {
+
+        double multiplier = Math.pow(10, decimalPlaces);
+
+        for (int i = rollingNumber - 1; i >= 0; i--) {
+
+            rollingAverage = 0;
+
+            for (int j = i; j < i + rollingNumber; j++) {
+                rollingAverage = rollingAverage + readings[j];
+            }
+
+            rollingAverage = Math.round((rollingAverage / rollingNumber) * multiplier);
+            rollingAverage = rollingAverage / multiplier;
+            rollingAvs[i] = rollingAverage;
+
+        }
 
     }
+
+    public void updateReadings(View view) {
+
+        LinearLayout linLayReading = (LinearLayout) findViewById(R.id.linLayReading);
+        LinearLayout linLayDate = (LinearLayout) findViewById(R.id.linLayDate);
+        String textValue;
+        EditText editText;
+        double inputValue;
+        Date inputDate;
+        Date defaultDate = convertStringToDate("01/01/1900");
+        rollingAverage = 0;
+        boolean duffdates = false;
+
+        for (int i = 0; i < rollingNumber; i++) {
+            editText = (EditText) linLayReading.findViewById(i);
+            textValue = editText.getText().toString();
+            inputValue = Double.valueOf(textValue);
+            readings[i] = inputValue;
+
+            editText = (EditText) linLayDate.findViewById(i);
+            textValue = editText.getText().toString();
+            inputDate = convertStringToDate(textValue);
+            if (inputDate.equals(defaultDate)) {
+                duffdates = true;
+            }
+            else {
+                readDates[i] = inputDate;
+            }
+
+        }
+
+        if (duffdates) {
+            Toast.makeText(this, "Invalid date(s) ignored", Toast.LENGTH_LONG).show();
+        }
+
+        recalcAvs();
+        saveData();
+    }
+
 
 }
