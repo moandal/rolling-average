@@ -11,36 +11,36 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
 /*
-todo Allow editing of previous readings
 todo Localise dates
 */
 
 public class MainActivity extends AppCompatActivity {
 
     double rollingAverage;
-    int rollingNumber;
-    int decimalPlaces;
+    int rollingNumber; // number of readings to average over
+    int decimalPlaces; // number of decimal places for rounding of rolling average
+    int maxArrayIndex;
     double[] readings = new double[100];
     double[] rollingAvs = new double[100];
     Date[] readDates = new Date[100];
-    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat ddmmFormat = new SimpleDateFormat("dd/MM/yyyy");
+    java.text.DateFormat formatter = android.text.format.DateFormat.getDateFormat(this);
 
     public Date convertStringToDate(String dateString)
     {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date formatteddate = new Date();
         try{
-            formatteddate = formatter.parse(dateString);
+            formatteddate = ddmmFormat.parse(dateString);
         }
         catch(ParseException e){
             e.printStackTrace();
@@ -49,9 +49,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayData() {
+
+        //java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this);
+
         String Hist1 = Double.toString(readings[0]);
         String Hav1 = Double.toString(rollingAvs[0]);
         String HDt1 = formatter.format(readDates[0]);
+
 
         TextView textHist1 = (TextView) findViewById(R.id.textHist1);
         TextView textHAv1 = (TextView) findViewById(R.id.textHAv1);
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         loadData();
         displayData();
     }
@@ -104,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
-                                // No button clicked so do nothing
+                                // "No" button clicked so do nothing
                                 break;
                         }
                     }
@@ -139,10 +144,10 @@ public class MainActivity extends AppCompatActivity {
     public void saveData() {
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        for (int i = 0; i < rollingNumber; i++) {
+        for (int i = 0; i < maxArrayIndex; i++) {
             editor.putString("Weight" + i, Double.toString(readings[i]));
             editor.putString("rollingAvs" + i, Double.toString(rollingAvs[i]));
-            editor.putString("readDates" + i, formatter.format(readDates[i]));
+            editor.putString("readDates" + i, ddmmFormat.format(readDates[i]));
         }
         editor.putString("RollingAverage", Double.toString(rollingAverage));
         editor.commit();
@@ -154,8 +159,14 @@ public class MainActivity extends AppCompatActivity {
         rollingNumber = Integer.parseInt(preferences.getString("rolling_number", "7"));
         decimalPlaces = Integer.parseInt(preferences.getString("decimal_places", "2"));
 
+        //Calculate how many entries to keep track of so we can maintain the rolling average history
+        if ( (rollingNumber * 2) - 1 > readings.length )
+            maxArrayIndex = readings.length;
+        else
+            maxArrayIndex = (rollingNumber * 2) - 1;
+
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        for (int i = 0; i < rollingNumber; i++) {
+        for (int i = 0; i < maxArrayIndex; i++) {
             readings[i] = Double.valueOf(sp.getString("Weight" + i, "0"));
             rollingAvs[i] = Double.valueOf(sp.getString("rollingAvs" + i, "0"));
             readDates[i] = convertStringToDate(sp.getString("readDates" + i, "0"));
@@ -183,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         double inputValue = Double.valueOf(message);
         rollingAverage = 0;
         Boolean init = true;
-        for (int i = 0; i < rollingNumber; i++) {
+        for (int i = 0; i < maxArrayIndex; i++) {
             if (readings[i] != 0) {
                 init = false;
             }
