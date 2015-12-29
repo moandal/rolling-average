@@ -12,9 +12,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class EditActivity extends AppCompatActivity {
 
@@ -25,22 +27,23 @@ public class EditActivity extends AppCompatActivity {
     double[] rollingAvs = new double[100];
     Date[] readDates = new Date[100];
     SimpleDateFormat ddmmFormat = new SimpleDateFormat("dd/MM/yyyy");
-    java.text.DateFormat formatter = android.text.format.DateFormat.getDateFormat(this);
     EditText[] textEdRead = new EditText[100];
     EditText[] textEdDate = new EditText[100];
     int maxArrayIndex;
 
     public Date convertStringToDate(String dateString)
     {
-        formatter.setLenient(false);
+        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+
+        df.setLenient(false);
         Date formatteddate = new Date();
 
         try{
-            formatteddate = formatter.parse(dateString);
+            formatteddate = df.parse(dateString);
         }
         catch(ParseException e){
             try{
-                formatteddate = formatter.parse("01/01/1900");
+                formatteddate = df.parse("01/01/1900");
             }
             catch(ParseException f){
                 f.printStackTrace();
@@ -127,6 +130,8 @@ public class EditActivity extends AppCompatActivity {
 
     private void displayData() {
 
+        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+
         LinearLayout linLayReading = (LinearLayout) findViewById(R.id.linLayReading);
         LinearLayout.LayoutParams linLayReadingparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -144,13 +149,12 @@ public class EditActivity extends AppCompatActivity {
 
             textEdDate[i] = new EditText(this);
             textEdDate[i].setLayoutParams(linLayDateparams);
-            textEdDate[i].setText(formatter.format(readDates[i]));
+            textEdDate[i].setText(df.format(readDates[i]));
             textEdDate[i].setInputType(InputType.TYPE_CLASS_DATETIME);
             textEdDate[i].setId(i);
             linLayDate.addView(textEdDate[i]);
-
         }
-        
+
     }
 
     public void recalcAvs() {
@@ -202,9 +206,10 @@ public class EditActivity extends AppCompatActivity {
             }
         }
 
-        if (duffdates) {
+        if (duffdates)
             Toast.makeText(this, "Invalid date(s) ignored", Toast.LENGTH_LONG).show();
-        }
+        else
+            Toast.makeText(this, "Data updated", Toast.LENGTH_LONG).show();
 
         recalcAvs();
         saveData();

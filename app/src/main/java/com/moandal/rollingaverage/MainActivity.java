@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 
 /*
 todo Localise dates
@@ -34,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     double[] rollingAvs = new double[100];
     Date[] readDates = new Date[100];
     SimpleDateFormat ddmmFormat = new SimpleDateFormat("dd/MM/yyyy");
-    java.text.DateFormat formatter = android.text.format.DateFormat.getDateFormat(this);
 
     public Date convertStringToDate(String dateString)
     {
@@ -50,12 +50,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayData() {
 
-        //java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this);
+        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
 
         String Hist1 = Double.toString(readings[0]);
         String Hav1 = Double.toString(rollingAvs[0]);
-        String HDt1 = formatter.format(readDates[0]);
-
+        String HDt1 = df.format(readDates[0]);
 
         TextView textHist1 = (TextView) findViewById(R.id.textHist1);
         TextView textHAv1 = (TextView) findViewById(R.id.textHAv1);
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 1; i < rollingNumber; i++) {
             Hist1 += "\n" + Double.toString(readings[i]);
             Hav1 += "\n" + Double.toString(rollingAvs[i]);
-            HDt1 += "\n" + formatter.format(readDates[i]);
+            HDt1 += "\n" + df.format(readDates[i]);
         }
 
         textHist1.setText(Hist1);
