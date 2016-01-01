@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.Locale;
 
 //Todo Sort out max indexes
+//Todo Recalc averages after change of decimal places
+//Todo Gather common code in a single class
 
 public class MainActivity extends AppCompatActivity {
 

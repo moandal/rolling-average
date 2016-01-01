@@ -9,7 +9,7 @@
 
     <string name="pref_header_general">General</string>
 
-    <string name="pref_title_rolling_number">Number of values for average</string>
+    <string name="pref_title_rolling_number">Number of values for average (0-50)</string>
     <string name="pref_default_rolling_number">7</string>
 
     <string name="pref_title_decimal_places">Number of decimal places</string>
