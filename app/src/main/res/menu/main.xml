@@ -4,9 +4,8 @@
     xmlns:support="http://schemas.android.com/apk/res-auto" >
 
     <!--
-        Here we set the settings item to always be in the overflow menu, by setting
-        support:showAsAction to never, so it is never displayed as an action item on the compatible
-        Action Bar.
+        Here we set items to always be in the overflow menu by setting support:showAsAction to never,
+        so it is never displayed as an action item on the compatible Action Bar.
     -->
     <item
         android:id="@+id/menu_erase"

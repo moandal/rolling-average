@@ -21,16 +21,14 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-/*
-todo Localise dates
-*/
+//Todo Sort out max indexes
 
 public class MainActivity extends AppCompatActivity {
 
     double rollingAverage;
     int rollingNumber; // number of readings to average over
     int decimalPlaces; // number of decimal places for rounding of rolling average
-    int maxArrayIndex;
+    int maxArrayIndex; // number of readings in history to maintain
     double[] readings = new double[100];
     double[] rollingAvs = new double[100];
     Date[] readDates = new Date[100];
@@ -90,9 +88,10 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //Take appropriate action depending on which Menu item is chosen
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_erase:
+            case R.id.menu_erase: //Erase all data - check first
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
@@ -185,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         loadData();
     }
 
-    /** Called when the user clicks the Send button */
+    // Called when the user clicks the Enter button
     public void showAverage(View view) {
 
         EditText editWeight = (EditText) findViewById(R.id.editWeight);

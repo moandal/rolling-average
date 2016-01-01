@@ -177,6 +177,7 @@ public class EditActivity extends AppCompatActivity {
 
     }
 
+    // Performed when the Update button is clicked
     public void updateReadings(View view) {
 
         LinearLayout linLayReading = (LinearLayout) findViewById(R.id.linLayReading);
@@ -214,6 +215,5 @@ public class EditActivity extends AppCompatActivity {
         recalcAvs();
         saveData();
     }
-
 
 }
