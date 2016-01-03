@@ -4,16 +4,17 @@
     <string name="settings">Settings</string>
     <string name="edit_data">Edit Data</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_edit">Edit Data</string>
 
     <!-- Strings related to Settings -->
 
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_rolling_number">Number of values for average (0-50)</string>
+    <string name="pref_title_rolling_number">Number of values for average (2-100)</string>
     <string name="pref_default_rolling_number">7</string>
+
+    <string name="pref_title_number_to_display">Number of values to display (1-100)</string>
+    <string name="pref_default_number_to_display">7</string>
 
     <string name="pref_title_decimal_places">Number of decimal places</string>
     <string name="pref_default_decimal_places">2</string>
-    <string name="title_activity_edit">Edit Data</string>
 
 </resources>

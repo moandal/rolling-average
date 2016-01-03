@@ -80,6 +80,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         // to reflect the new value, per the Android Design guidelines.
         bindPreferenceSummaryToValue(findPreference("rolling_number"));
         bindPreferenceSummaryToValue(findPreference("decimal_places"));
+        bindPreferenceSummaryToValue(findPreference("number_to_display"));
     }
 
 }

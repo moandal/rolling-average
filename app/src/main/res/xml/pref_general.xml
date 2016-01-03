@@ -10,6 +10,15 @@
         android:title="@string/pref_title_rolling_number" />
 
     <EditTextPreference
+        android:defaultValue="@string/pref_default_number_to_display"
+        android:inputType="number"
+        android:key="number_to_display"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_number_to_display" />
+
+    <EditTextPreference
         android:defaultValue="@string/pref_default_decimal_places"
         android:inputType="number"
         android:key="decimal_places"

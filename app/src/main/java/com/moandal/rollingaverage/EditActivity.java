@@ -23,13 +23,14 @@ public class EditActivity extends AppCompatActivity {
     double rollingAverage;
     int rollingNumber;
     int decimalPlaces;
-    double[] readings = new double[100];
-    double[] rollingAvs = new double[100];
-    Date[] readDates = new Date[100];
+    int numberToDisplay; // number of readings in history to display
+    int arraySize = 100;
+    double[] readings = new double[arraySize];
+    double[] rollingAvs = new double[arraySize];
+    Date[] readDates = new Date[arraySize];
     SimpleDateFormat ddmmFormat = new SimpleDateFormat("dd/MM/yyyy");
-    EditText[] textEdRead = new EditText[100];
-    EditText[] textEdDate = new EditText[100];
-    int maxArrayIndex;
+    EditText[] textEdRead = new EditText[arraySize];
+    EditText[] textEdDate = new EditText[arraySize];
 
     public Date convertStringToDate(String dateString)
     {
@@ -88,15 +89,10 @@ public class EditActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         rollingNumber = Integer.parseInt(preferences.getString("rolling_number", "7"));
         decimalPlaces = Integer.parseInt(preferences.getString("decimal_places", "2"));
-
-        //Calculate how many entries to keep track of so we can maintain the rolling average history
-        if ( (rollingNumber * 2) - 1 > readings.length )
-            maxArrayIndex = readings.length;
-        else
-            maxArrayIndex = (rollingNumber * 2) - 1;
+        numberToDisplay = Integer.parseInt(preferences.getString("number_to_display", "7"));
 
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        for (int i = 0; i < maxArrayIndex; i++) {
+        for (int i = 0; i < arraySize; i++) {
             readings[i] = Double.valueOf(sp.getString("Weight" + i, "0"));
             rollingAvs[i] = Double.valueOf(sp.getString("rollingAvs" + i, "0"));
             readDates[i] = convertddmmToDate(sp.getString("readDates" + i, "0"));
@@ -107,7 +103,7 @@ public class EditActivity extends AppCompatActivity {
     public void saveData() {
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        for (int i = 0; i < maxArrayIndex; i++) {
+        for (int i = 0; i < arraySize; i++) {
             editor.putString("Weight" + i, Double.toString(readings[i]));
             editor.putString("rollingAvs" + i, Double.toString(rollingAvs[i]));
             editor.putString("readDates" + i, ddmmFormat.format(readDates[i]));
@@ -138,7 +134,7 @@ public class EditActivity extends AppCompatActivity {
         LinearLayout linLayDate = (LinearLayout) findViewById(R.id.linLayDate);
         LinearLayout.LayoutParams linLayDateparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        for (int i = 0; i < rollingNumber; i++) {
+        for (int i = 0; i < numberToDisplay; i++) {
 
             textEdRead[i] = new EditText(this);
             textEdRead[i].setLayoutParams(linLayReadingparams);
@@ -157,11 +153,13 @@ public class EditActivity extends AppCompatActivity {
 
     }
 
+    // Recalculate all the rolling averages for the entire history set
     public void recalcAvs() {
 
         double multiplier = Math.pow(10, decimalPlaces);
+        int startIndex = arraySize - rollingNumber;
 
-        for (int i = rollingNumber - 1; i >= 0; i--) {
+        for (int i = startIndex; i >= 0; i--) {
 
             rollingAverage = 0;
 
@@ -190,7 +188,7 @@ public class EditActivity extends AppCompatActivity {
         rollingAverage = 0;
         boolean duffdates = false;
 
-        for (int i = 0; i < rollingNumber; i++) {
+        for (int i = 0; i < numberToDisplay; i++) {
             editText = (EditText) linLayReading.findViewById(i);
             textValue = editText.getText().toString();
             inputValue = Double.valueOf(textValue);
