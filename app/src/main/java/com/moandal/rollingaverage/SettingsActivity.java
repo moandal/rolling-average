@@ -1,21 +1,47 @@
 package com.moandal.rollingaverage;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.widget.Toast;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
+    // The preference summary shows the current value of the preference under the preference title on the setting screen
+    // This method sets the summary value so that it shows the correct value
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
 
-            preference.setSummary(stringValue);
-            return true;
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
+            int val = Integer.parseInt(value.toString());
+
+            if (preference.getKey().equals("rolling_number")) {
+                if (val < 2 || val > 100) {
+                    preference.setSummary(preferences.getString("rolling_number", "7"));
+                    return false;
+                } else {
+                    preference.setSummary(value.toString());
+                    return true;
+                }
+            }
+            else if (preference.getKey().equals("number_to_display")) {
+                if (val < 1 || val > 100) {
+                    preference.setSummary(preferences.getString("number_to_display", "7"));
+                    return false;
+                } else {
+                    preference.setSummary(value.toString());
+                    return true;
+                }
+            }
+            else {
+                preference.setSummary(value.toString());
+                return true;
+            }
         }
     };
 
