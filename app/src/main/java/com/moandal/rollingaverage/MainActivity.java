@@ -21,9 +21,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-//Todo - Allow user to choose number of historic readings to display - Done
-//Todo Validate values input in Settings
-//Todo Recalc averages after change of decimal places
+//Todo Dialog box for invalid settings
+//Todo Amend app to calculate rather than store averages
 //Todo Gather common code in a single class
 //Todo Option to export data to SD card
 
@@ -68,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
             Hist1 += "\n" + Double.toString(readings[i]);
             Hav1 += "\n" + Double.toString(rollingAvs[i]);
             HDt1 += "\n" + df.format(readDates[i]);
+            if (i == rollingNumber - 1) {
+                Hist1 += "\n---";
+                Hav1 += "\n---";
+                HDt1 += "\n---";
+            }
         }
 
         textHist1.setText(Hist1);
