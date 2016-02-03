@@ -50,7 +50,31 @@ public class MainActivity extends AppCompatActivity {
         return formatteddate;
     }
 
+    public void calcAvs() {
+
+        double multiplier = Math.pow(10, decimalPlaces);
+        int startIndex = arraySize - rollingNumber;
+
+        for (int i = startIndex; i >= 0; i--) {
+
+            rollingAverage = 0;
+
+            for (int j = i; j < i + rollingNumber; j++) {
+                rollingAverage = rollingAverage + readings[j];
+            }
+
+            rollingAverage = Math.round((rollingAverage / rollingNumber) * multiplier);
+            rollingAverage = rollingAverage / multiplier;
+            rollingAvs[i] = rollingAverage;
+
+        }
+
+    }
+
+
     private void displayData() {
+
+        calcAvs();
 
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
 
@@ -153,10 +177,10 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sp.edit();
         for (int i = 0; i < arraySize; i++) {
             editor.putString("Weight" + i, Double.toString(readings[i]));
-            editor.putString("rollingAvs" + i, Double.toString(rollingAvs[i]));
+            //editor.putString("rollingAvs" + i, Double.toString(rollingAvs[i]));
             editor.putString("readDates" + i, ddmmFormat.format(readDates[i]));
         }
-        editor.putString("RollingAverage", Double.toString(rollingAverage));
+        //editor.putString("RollingAverage", Double.toString(rollingAverage));
         editor.commit();
     }
 
@@ -170,10 +194,10 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         for (int i = 0; i < arraySize; i++) {
             readings[i] = Double.valueOf(sp.getString("Weight" + i, "0"));
-            rollingAvs[i] = Double.valueOf(sp.getString("rollingAvs" + i, "0"));
+            //rollingAvs[i] = Double.valueOf(sp.getString("rollingAvs" + i, "0"));
             readDates[i] = convertStringToDate(sp.getString("readDates" + i, "0"));
         }
-        rollingAverage = Double.valueOf(sp.getString("RollingAverage","0"));
+        //rollingAverage = Double.valueOf(sp.getString("RollingAverage","0"));
     }
 
     @Override
@@ -211,19 +235,27 @@ public class MainActivity extends AppCompatActivity {
         else {
             for (int i = readings.length - 1; i > 0; i--) {
                 readings[i] = readings[i-1];
-                rollingAvs[i] = rollingAvs[i-1];
                 readDates[i] = readDates[i-1];
+
+                /*
+                rollingAvs[i] = rollingAvs[i-1];
                 if (i < rollingNumber) {
                     rollingAverage = rollingAverage + readings[i];
                 }
+                */
+
             }
 
             readings[0] = inputValue;
+            readDates[0] = new Date();
+
+            /*
             double multiplier = Math.pow(10, decimalPlaces);
             rollingAverage = Math.round(((rollingAverage + readings[0]) / rollingNumber) * multiplier);
             rollingAverage = rollingAverage / multiplier;
             rollingAvs[0] = rollingAverage;
-            readDates[0] = new Date();
+            */
+
         }
 
         displayData();

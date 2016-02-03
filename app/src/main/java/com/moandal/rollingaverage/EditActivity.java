@@ -94,10 +94,10 @@ public class EditActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         for (int i = 0; i < arraySize; i++) {
             readings[i] = Double.valueOf(sp.getString("Weight" + i, "0"));
-            rollingAvs[i] = Double.valueOf(sp.getString("rollingAvs" + i, "0"));
+            //rollingAvs[i] = Double.valueOf(sp.getString("rollingAvs" + i, "0"));
             readDates[i] = convertddmmToDate(sp.getString("readDates" + i, "0"));
         }
-        rollingAverage = Double.valueOf(sp.getString("RollingAverage","0"));
+        //rollingAverage = Double.valueOf(sp.getString("RollingAverage","0"));
     }
 
     public void saveData() {
@@ -105,10 +105,10 @@ public class EditActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sp.edit();
         for (int i = 0; i < arraySize; i++) {
             editor.putString("Weight" + i, Double.toString(readings[i]));
-            editor.putString("rollingAvs" + i, Double.toString(rollingAvs[i]));
+            //editor.putString("rollingAvs" + i, Double.toString(rollingAvs[i]));
             editor.putString("readDates" + i, ddmmFormat.format(readDates[i]));
         }
-        editor.putString("RollingAverage", Double.toString(rollingAverage));
+        //editor.putString("RollingAverage", Double.toString(rollingAverage));
         editor.commit();
     }
 
@@ -139,22 +139,22 @@ public class EditActivity extends AppCompatActivity {
             textEdRead[i] = new EditText(this);
             textEdRead[i].setLayoutParams(linLayReadingparams);
             textEdRead[i].setText(Double.toString(readings[i]));
-            textEdRead[i].setInputType(InputType.TYPE_CLASS_NUMBER);
+            textEdRead[i].setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             textEdRead[i].setId(i);
             linLayReading.addView(textEdRead[i]);
 
             textEdDate[i] = new EditText(this);
             textEdDate[i].setLayoutParams(linLayDateparams);
             textEdDate[i].setText(df.format(readDates[i]));
-            textEdDate[i].setInputType(InputType.TYPE_CLASS_DATETIME);
+            textEdDate[i].setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
             textEdDate[i].setId(i);
             linLayDate.addView(textEdDate[i]);
         }
 
     }
 
-    // Recalculate all the rolling averages for the entire history set
-    public void recalcAvs() {
+    // Calculate all the rolling averages for the entire history set
+    public void calcAvs() {
 
         double multiplier = Math.pow(10, decimalPlaces);
         int startIndex = arraySize - rollingNumber;
@@ -210,7 +210,7 @@ public class EditActivity extends AppCompatActivity {
         else
             Toast.makeText(this, "Data updated", Toast.LENGTH_LONG).show();
 
-        recalcAvs();
+        calcAvs();
         saveData();
     }
 
