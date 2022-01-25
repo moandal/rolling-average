@@ -22,9 +22,8 @@ import java.util.Date;
 import java.util.Locale;
 
 //Todo Dialog box for invalid settings
-//Todo Amend app to calculate rather than store averages
 //Todo Gather common code in a single class
-//Todo Option to export data to SD card
+//Todo Option to export data to a file
 
 public class MainActivity extends AppCompatActivity {
 
