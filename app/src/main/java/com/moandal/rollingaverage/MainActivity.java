@@ -154,8 +154,8 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.settings:
 
-                Intent i = new Intent(this, SettingsActivity.class);
-                startActivity(i);
+                Intent intent_Settings = new Intent(this, SettingsActivity.class);
+                startActivity(intent_Settings);
 
                 return true;
 
