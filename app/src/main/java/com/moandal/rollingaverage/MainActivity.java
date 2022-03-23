@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     private void displayData() {
 
         calcAvs();
@@ -209,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadData();
+        displayData();
     }
 
     // Called when the user clicks the Enter button
