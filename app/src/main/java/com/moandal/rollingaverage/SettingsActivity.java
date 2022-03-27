@@ -4,11 +4,24 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import androidx.appcompat.app.ActionBar;
+
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import androidx.core.app.NavUtils;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //getFragmentManager().beginTransaction().replace(android.R.id.content, new Prefs()).commit();
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            // Show the Up button in the action bar.
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
 
     // The preference summary shows the current value of the preference under the preference title on the setting screen
     // This method sets the summary value so that it shows the correct value
@@ -54,21 +67,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), ""));
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setupActionBar();
-    }
-
-    // Set up the {@link android.app.ActionBar}, if the API is available.
-    private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            // Show the Up button in the action bar.
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     @Override
