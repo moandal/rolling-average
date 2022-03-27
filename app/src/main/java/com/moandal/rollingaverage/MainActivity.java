@@ -113,9 +113,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.main, menu);
-
         return true;
     }
 
@@ -192,10 +190,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         for (int i = 0; i < arraySize; i++) {
             readings[i] = Double.valueOf(sp.getString("Weight" + i, "0"));
-            //rollingAvs[i] = Double.valueOf(sp.getString("rollingAvs" + i, "0"));
             readDates[i] = convertStringToDate(sp.getString("readDates" + i, "0"));
         }
-        //rollingAverage = Double.valueOf(sp.getString("RollingAverage","0"));
     }
 
     @Override
@@ -236,26 +232,12 @@ public class MainActivity extends AppCompatActivity {
                 readings[i] = readings[i-1];
                 readDates[i] = readDates[i-1];
 
-                /*
-                rollingAvs[i] = rollingAvs[i-1];
-                if (i < rollingNumber) {
-                    rollingAverage = rollingAverage + readings[i];
-                }
-                */
-
             }
 
             readings[0] = inputValue;
             readDates[0] = new Date();
 
-            /*
-            double multiplier = Math.pow(10, decimalPlaces);
-            rollingAverage = Math.round(((rollingAverage + readings[0]) / rollingNumber) * multiplier);
-            rollingAverage = rollingAverage / multiplier;
-            rollingAvs[0] = rollingAverage;
-            */
-
-        }
+       }
 
         displayData();
         saveData();
