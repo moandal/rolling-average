@@ -37,6 +37,15 @@ public class MainActivity extends AppCompatActivity {
     Date[] readDates = new Date[arraySize];
     SimpleDateFormat ddmmFormat = new SimpleDateFormat("dd/MM/yyyy");
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        loadData();
+        displayData();
+    }
+
     public Date convertStringToDate(String dateString)
     {
         Date formatteddate = new Date();
@@ -101,15 +110,6 @@ public class MainActivity extends AppCompatActivity {
         textHDt1.setText(HDt1);
         textAverage.setText(Double.toString(rollingAverage));
 
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        loadData();
-        displayData();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
