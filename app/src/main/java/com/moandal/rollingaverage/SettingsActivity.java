@@ -5,21 +5,35 @@ import android.os.Bundle;
 import android.preference.Preference;
 import androidx.appcompat.app.ActionBar;
 
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
-import androidx.core.app.NavUtils;
 
-public class SettingsActivity extends AppCompatPreferenceActivity {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
+import androidx.preference.PreferenceFragmentCompat;
+
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getFragmentManager().beginTransaction().replace(android.R.id.content, new Prefs()).commit();
+        setContentView(R.layout.settings_activity);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.settings_frag, new SettingsFragment())
+                    .commit();
+        }
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            // Show the Up button in the action bar.
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    public static class SettingsFragment extends PreferenceFragmentCompat {
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            setPreferencesFromResource(R.xml.root_preferences, rootKey);
         }
     }
 
@@ -70,16 +84,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            if (!super.onMenuItemSelected(featureId, item)) {
-                NavUtils.navigateUpFromSameTask(this);
-            }
-            return true;
+            NavUtils.navigateUpFromSameTask(this);
         }
-        return super.onMenuItemSelected(featureId, item);
+        return super.onOptionsItemSelected(item);
     }
+
+    /*
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -94,7 +107,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         // use the older PreferenceActivity APIs.
 
         // Add 'general' preferences.
-        addPreferencesFromResource(R.xml.pref_general);
+        addPreferencesFromResource(R.xml.root_preferences);
 
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
         // their values. When their values change, their summaries are updated
@@ -103,5 +116,5 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         bindPreferenceSummaryToValue(findPreference("decimal_places"));
         bindPreferenceSummaryToValue(findPreference("number_to_display"));
     }
-
+*/
 }
