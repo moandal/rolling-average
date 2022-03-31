@@ -14,7 +14,7 @@
     <string name="pref_title_number_to_display">Number of values to display (1-100)</string>
     <string name="pref_default_number_to_display">7</string>
 
-    <string name="pref_title_decimal_places">Number of decimal places</string>
+    <string name="pref_title_decimal_places">Number of decimal places (1-5)</string>
     <string name="pref_default_decimal_places">2</string>
 
 </resources>

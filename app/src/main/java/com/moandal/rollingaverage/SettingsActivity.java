@@ -1,15 +1,11 @@
 package com.moandal.rollingaverage;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 import androidx.appcompat.app.ActionBar;
-
-import android.preference.PreferenceManager;
-import android.view.MenuItem;
-
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
+import androidx.preference.EditTextPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -34,87 +30,64 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
-        }
-    }
 
-    // The preference summary shows the current value of the preference under the preference title on the setting screen
-    // This method sets the summary value so that it shows the correct value
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
+            EditTextPreference rolling_number = getPreferenceManager().findPreference("rolling_number");
+            EditTextPreference number_to_display = getPreferenceManager().findPreference("number_to_display");
+            EditTextPreference decimal_places = getPreferenceManager().findPreference("decimal_places");
 
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
-            int val = Integer.parseInt(value.toString());
+            rolling_number.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int val = Integer.parseInt(newValue.toString());
 
-            if (preference.getKey().equals("rolling_number")) {
-                if (val < 2 || val > 100) {
-                    preference.setSummary(preferences.getString("rolling_number", "7"));
-                    return false;
-                } else {
-                    preference.setSummary(value.toString());
-                    return true;
+                    if (val < 2 || val > 100) {
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle("Invalid Input");
+                        builder.setMessage("Value must be between 2 and 100");
+                        builder.setPositiveButton(android.R.string.ok, null);
+                        builder.show();
+                        return false;
+                    } else {
+                        return true;
+                    }
                 }
-            }
-            else if (preference.getKey().equals("number_to_display")) {
-                if (val < 1 || val > 100) {
-                    preference.setSummary(preferences.getString("number_to_display", "7"));
-                    return false;
-                } else {
-                    preference.setSummary(value.toString());
-                    return true;
+            });
+
+            number_to_display.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int val = Integer.parseInt(newValue.toString());
+
+                    if (val < 1 || val > 100) {
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle("Invalid Input");
+                        builder.setMessage("Value must be between 1 and 100");
+                        builder.setPositiveButton(android.R.string.ok, null);
+                        builder.show();
+                        return false;
+                    } else {
+                        return true;
+                    }
                 }
-            }
-            else {
-                preference.setSummary(value.toString());
-                return true;
-            }
+            });
+
+            decimal_places.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int val = Integer.parseInt(newValue.toString());
+
+                    if (val < 1 || val > 5) {
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle("Invalid Input");
+                        builder.setMessage("Value must be between 1 and 5");
+                        builder.setPositiveButton(android.R.string.ok, null);
+                        builder.show();
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            });
         }
-    };
-
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        // Trigger the listener immediately with the preference's
-        // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    /*
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        setupSimplePreferencesScreen();
-    }
-
-    private void setupSimplePreferencesScreen() {
-
-        // In the simplified UI, fragments are not used at all and we instead
-        // use the older PreferenceActivity APIs.
-
-        // Add 'general' preferences.
-        addPreferencesFromResource(R.xml.root_preferences);
-
-        // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
-        // their values. When their values change, their summaries are updated
-        // to reflect the new value, per the Android Design guidelines.
-        bindPreferenceSummaryToValue(findPreference("rolling_number"));
-        bindPreferenceSummaryToValue(findPreference("decimal_places"));
-        bindPreferenceSummaryToValue(findPreference("number_to_display"));
-    }
-*/
 }

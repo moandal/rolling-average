@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-//Todo Dialog box for invalid settings
 //Todo Gather common code in a single class
 //Todo Option to export data to a file
 
@@ -173,10 +172,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sp.edit();
         for (int i = 0; i < arraySize; i++) {
             editor.putString("Weight" + i, Double.toString(readings[i]));
-            //editor.putString("rollingAvs" + i, Double.toString(rollingAvs[i]));
             editor.putString("readDates" + i, ddmmFormat.format(readDates[i]));
         }
-        //editor.putString("RollingAverage", Double.toString(rollingAverage));
         editor.commit();
     }
 

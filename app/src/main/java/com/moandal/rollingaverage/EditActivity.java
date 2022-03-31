@@ -94,10 +94,8 @@ public class EditActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         for (int i = 0; i < arraySize; i++) {
             readings[i] = Double.valueOf(sp.getString("Weight" + i, "0"));
-            //rollingAvs[i] = Double.valueOf(sp.getString("rollingAvs" + i, "0"));
             readDates[i] = convertddmmToDate(sp.getString("readDates" + i, "0"));
         }
-        //rollingAverage = Double.valueOf(sp.getString("RollingAverage","0"));
     }
 
     public void saveData() {
@@ -105,10 +103,8 @@ public class EditActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sp.edit();
         for (int i = 0; i < arraySize; i++) {
             editor.putString("Weight" + i, Double.toString(readings[i]));
-            //editor.putString("rollingAvs" + i, Double.toString(rollingAvs[i]));
             editor.putString("readDates" + i, ddmmFormat.format(readDates[i]));
         }
-        //editor.putString("RollingAverage", Double.toString(rollingAverage));
         editor.commit();
     }
 
@@ -186,7 +182,7 @@ public class EditActivity extends AppCompatActivity {
         Date inputDate;
         Date defaultDate = convertStringToDate("01/01/1900");
         rollingAverage = 0;
-        boolean duffdates = false;
+        boolean duffDates = false;
 
         for (int i = 0; i < numberToDisplay; i++) {
             editText = (EditText) linLayReading.findViewById(i);
@@ -198,14 +194,14 @@ public class EditActivity extends AppCompatActivity {
             textValue = editText.getText().toString();
             inputDate = convertStringToDate(textValue);
             if (inputDate.equals(defaultDate)) {
-                duffdates = true;
+                duffDates = true;
             }
             else {
                 readDates[i] = inputDate;
             }
         }
 
-        if (duffdates)
+        if (duffDates)
             Toast.makeText(this, "Invalid date(s) ignored", Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, "Data updated", Toast.LENGTH_LONG).show();
