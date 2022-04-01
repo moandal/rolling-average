@@ -23,6 +23,7 @@ import java.util.Locale;
 
 //Todo Gather common code in a single class
 //Todo Option to export data to a file
+//Todo Improve Edit activity so that invalid dates are reset to what they were after clicking the Update button
 
 public class MainActivity extends AppCompatActivity {
 

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
@@ -202,7 +203,7 @@ public class EditActivity extends AppCompatActivity {
         }
 
         if (duffDates)
-            Toast.makeText(this, "Invalid date(s) ignored", Toast.LENGTH_LONG).show();
+            Utils.showErrorMessage("Invalid date(s) ignored", this);
         else
             Toast.makeText(this, "Data updated", Toast.LENGTH_LONG).show();
 

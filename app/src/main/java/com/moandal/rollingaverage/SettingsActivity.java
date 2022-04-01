@@ -1,5 +1,6 @@
 package com.moandal.rollingaverage;
 
+import android.app.Activity;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -41,11 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
                     int val = Integer.parseInt(newValue.toString());
 
                     if (val < 2 || val > 100) {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle("Invalid Input");
-                        builder.setMessage("Value must be between 2 and 100");
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.show();
+                        Utils.showErrorMessage("Value must be between 2 and 100", getActivity());
                         return false;
                     } else {
                         return true;
@@ -59,11 +56,7 @@ public class SettingsActivity extends AppCompatActivity {
                     int val = Integer.parseInt(newValue.toString());
 
                     if (val < 1 || val > 100) {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle("Invalid Input");
-                        builder.setMessage("Value must be between 1 and 100");
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.show();
+                        Utils.showErrorMessage("Value must be between 1 and 100", getActivity());
                         return false;
                     } else {
                         return true;
@@ -77,11 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
                     int val = Integer.parseInt(newValue.toString());
 
                     if (val < 1 || val > 5) {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle("Invalid Input");
-                        builder.setMessage("Value must be between 1 and 5");
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.show();
+                        Utils.showErrorMessage("Value must be between 1 and 5", getActivity());
                         return false;
                     } else {
                         return true;
@@ -89,5 +78,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
         }
+
     }
+
 }
