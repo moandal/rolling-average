@@ -32,27 +32,6 @@ public class EditActivity extends AppCompatActivity {
     EditText[] textEdRead = new EditText[arraySize];
     EditText[] textEdDate = new EditText[arraySize];
 
-    public Date convertStringToDate(String dateString)
-    {
-        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-
-        df.setLenient(false);
-        Date formatteddate = new Date();
-
-        try{
-            formatteddate = df.parse(dateString);
-        }
-        catch(ParseException e){
-            try{
-                formatteddate = df.parse("01/01/1900");
-            }
-            catch(ParseException f){
-                f.printStackTrace();
-            }
-        }
-        return formatteddate;
-    }
-
     public Date convertddmmToDate(String dateString)
     {
         Date formatteddate = new Date();
@@ -180,7 +159,7 @@ public class EditActivity extends AppCompatActivity {
         EditText editText;
         double inputValue;
         Date inputDate;
-        Date defaultDate = convertStringToDate("01/01/1900");
+        Date defaultDate = Utils.convertStringToDate("01/01/1900");
         rollingAverage = 0;
         boolean duffDates = false;
 
@@ -192,7 +171,7 @@ public class EditActivity extends AppCompatActivity {
 
             editText = (EditText) linLayDate.findViewById(i);
             textValue = editText.getText().toString();
-            inputDate = convertStringToDate(textValue);
+            inputDate = Utils.convertStringToDate(textValue);
             if (inputDate.equals(defaultDate)) {
                 duffDates = true;
             }

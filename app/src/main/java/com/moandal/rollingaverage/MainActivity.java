@@ -38,27 +38,6 @@ public class MainActivity extends AppCompatActivity {
     public Date[] readDates = new Date[arraySize];
     SimpleDateFormat ddmmFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-    public Date convertStringToDate(String dateString)
-    {
-        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-
-        df.setLenient(false);
-        Date formatteddate = new Date();
-
-        try{
-            formatteddate = df.parse(dateString);
-        }
-        catch(ParseException e){
-            try{
-                formatteddate = df.parse("01/01/1900");
-            }
-            catch(ParseException f){
-                f.printStackTrace();
-            }
-        }
-        return formatteddate;
-    }
-
     public void loadData() {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -69,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
           SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
           for (int i = 0; i < arraySize; i++) {
               readings[i] = Double.valueOf(sp.getString("Weight" + i, "0"));
-              readDates[i] = convertStringToDate(sp.getString("readDates" + i, "0"));
+              readDates[i] = Utils.convertStringToDate(sp.getString("readDates" + i, "0"));
           }
     }
 
