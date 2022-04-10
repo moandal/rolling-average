@@ -1,5 +1,6 @@
 package com.moandal.rollingaverage;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,35 +28,59 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    double rollingAverage;
-    int rollingNumber; // number of readings to average over
-    int decimalPlaces; // number of decimal places for rounding of rolling average
-    int numberToDisplay; // number of readings in history to display
-    int arraySize = 100;
-    double[] readings = new double[arraySize];
-    double[] rollingAvs = new double[arraySize];
-    Date[] readDates = new Date[arraySize];
+    public double rollingAverage;
+    public int rollingNumber; // number of readings to average over
+    public int decimalPlaces; // number of decimal places for rounding of rolling average
+    public int numberToDisplay; // number of readings in history to display
+    public int arraySize = 100;
+    public double[] readings = new double[arraySize];
+    public double[] rollingAvs = new double[arraySize];
+    public Date[] readDates = new Date[arraySize];
     SimpleDateFormat ddmmFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        loadData();
-        displayData();
-    }
 
     public Date convertStringToDate(String dateString)
     {
+        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+
+        df.setLenient(false);
         Date formatteddate = new Date();
+
         try{
-            formatteddate = ddmmFormat.parse(dateString);
+            formatteddate = df.parse(dateString);
         }
         catch(ParseException e){
-            e.printStackTrace();
+            try{
+                formatteddate = df.parse("01/01/1900");
+            }
+            catch(ParseException f){
+                f.printStackTrace();
+            }
         }
         return formatteddate;
+    }
+
+    public void loadData() {
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        rollingNumber = Integer.parseInt(preferences.getString("rolling_number", "7"));
+        decimalPlaces = Integer.parseInt(preferences.getString("decimal_places", "2"));
+        numberToDisplay = Integer.parseInt(preferences.getString("number_to_display", "7"));
+
+          SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+          for (int i = 0; i < arraySize; i++) {
+              readings[i] = Double.valueOf(sp.getString("Weight" + i, "0"));
+              readDates[i] = convertStringToDate(sp.getString("readDates" + i, "0"));
+          }
+    }
+
+    public void saveData() {
+        SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        for (int i = 0; i < arraySize; i++) {
+            editor.putString("Weight" + i, Double.toString(readings[i]));
+            editor.putString("readDates" + i, ddmmFormat.format(readDates[i]));
+        }
+        editor.commit();
     }
 
     public void calcAvs() {
@@ -77,6 +102,15 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        loadData();
+        displayData();
     }
 
     private void displayData() {
@@ -168,30 +202,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void saveData() {
-        SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        for (int i = 0; i < arraySize; i++) {
-            editor.putString("Weight" + i, Double.toString(readings[i]));
-            editor.putString("readDates" + i, ddmmFormat.format(readDates[i]));
-        }
-        editor.commit();
-    }
-
-    public void loadData() {
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        rollingNumber = Integer.parseInt(preferences.getString("rolling_number", "7"));
-        decimalPlaces = Integer.parseInt(preferences.getString("decimal_places", "2"));
-        numberToDisplay = Integer.parseInt(preferences.getString("number_to_display", "7"));
-
-        SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        for (int i = 0; i < arraySize; i++) {
-            readings[i] = Double.valueOf(sp.getString("Weight" + i, "0"));
-            readDates[i] = convertStringToDate(sp.getString("readDates" + i, "0"));
-        }
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -235,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
             readings[0] = inputValue;
             readDates[0] = new Date();
 
-       }
+        }
 
         displayData();
         saveData();
