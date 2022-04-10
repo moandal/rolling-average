@@ -26,12 +26,15 @@ android {
             signingConfig signingConfigs.config
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    api fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.preference:preference:1.2.0'
     testImplementation 'junit:junit:4.13.2'
-    api 'androidx.appcompat:appcompat:1.4.1'
-    api 'androidx.legacy:legacy-support-v4:1.0.0'
-    api 'androidx.preference:preference:1.2.0'
 }
