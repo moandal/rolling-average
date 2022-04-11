@@ -32,6 +32,7 @@ public class EditActivity extends AppCompatActivity {
     EditText[] textEdRead = new EditText[arraySize];
     EditText[] textEdDate = new EditText[arraySize];
 
+    /*
     public Date convertddmmToDate(String dateString)
     {
         Date formatteddate = new Date();
@@ -44,7 +45,7 @@ public class EditActivity extends AppCompatActivity {
         }
         return formatteddate;
     }
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +74,7 @@ public class EditActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         for (int i = 0; i < arraySize; i++) {
             readings[i] = Double.valueOf(sp.getString("Weight" + i, "0"));
-            readDates[i] = convertddmmToDate(sp.getString("readDates" + i, "0"));
+            readDates[i] = Utils.convertStringToDate(sp.getString("readDates" + i, "0"));
         }
     }
 

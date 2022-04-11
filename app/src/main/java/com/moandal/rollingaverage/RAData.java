@@ -13,14 +13,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class RAData extends AppCompatActivity {
-/*
+public class RAData //extends AppCompatActivity
+{
+
     double rollingAverage;
     int rollingNumber; // number of readings to average over
     int decimalPlaces; // number of decimal places for rounding of rolling average
     int numberToDisplay; // number of readings in history to display
     double[] readings;
     double[] rollingAvs;
+    SharedPreferences settings;
+    SharedPreferences rollavData;
+    private int arraySize = 100;
  //   Date[] readDates = new Date[R.integer.array_size];
  //   SimpleDateFormat ddmmFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -36,7 +40,7 @@ public class RAData extends AppCompatActivity {
     void calcAvs() {
 
         double multiplier = Math.pow(10, decimalPlaces);
-        int startIndex = R.integer.array_size - rollingNumber;
+        int startIndex = arraySize - rollingNumber;
 
         for (int i = startIndex; i >= 0; i--) {
 

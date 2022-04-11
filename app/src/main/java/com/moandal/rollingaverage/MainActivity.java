@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         }
         editor.commit();
     }
-
+/*
     public void calcAvs() {
 
         double multiplier = Math.pow(10, decimalPlaces);
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +94,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayData() {
 
-        calcAvs();
+        RAData raData = new RAData(rollingAverage, rollingNumber, decimalPlaces, numberToDisplay, readings, rollingAvs);
+        raData.calcAvs();
+        rollingAverage = raData.rollingAverage;
+        readings = raData.readings;
+        rollingAvs = raData.rollingAvs;
 
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
 
