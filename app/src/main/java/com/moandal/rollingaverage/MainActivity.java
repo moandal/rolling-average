@@ -1,13 +1,9 @@
 package com.moandal.rollingaverage;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
@@ -16,8 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
@@ -32,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public int rollingNumber; // number of readings to average over
     public int decimalPlaces; // number of decimal places for rounding of rolling average
     public int numberToDisplay; // number of readings in history to display
-    public int arraySize = 100;
+    public int arraySize = Utils.arraySize;
     public double[] readings = new double[arraySize];
     public double[] rollingAvs = new double[arraySize];
     public Date[] readDates = new Date[arraySize];

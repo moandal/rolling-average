@@ -16,7 +16,7 @@ public class RAData //extends AppCompatActivity
     double[] readings;
     double[] rollingAvs;
     Date[] readDates;
-    private int arraySize = 100;
+    private int arraySize = Utils.arraySize;
 
     RAData(double rollingAverage, int rollingNumber, int decimalPlaces, int numberToDisplay, double[] readings, double[] rollingAvs, Date[] readDates) {
         this.rollingAverage = rollingAverage;

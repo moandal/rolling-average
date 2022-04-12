@@ -19,7 +19,7 @@ public class EditActivity extends AppCompatActivity {
     int rollingNumber;
     int decimalPlaces;
     int numberToDisplay; // number of readings in history to display
-    int arraySize = 100;
+    int arraySize = Utils.arraySize;
     double[] readings = new double[arraySize];
     double[] rollingAvs = new double[arraySize];
     Date[] readDates = new Date[arraySize];

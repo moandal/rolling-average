@@ -1,9 +1,7 @@
 package com.moandal.rollingaverage;
 
-import android.app.Activity;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
