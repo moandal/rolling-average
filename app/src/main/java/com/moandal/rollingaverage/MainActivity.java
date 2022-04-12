@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-//Todo Gather common code in a single class
 //Todo Option to export data to a file
+//Todo Dark theme
 //Todo Improve Edit activity so that invalid dates are reset to what they were after clicking the Update button
 
 public class MainActivity extends AppCompatActivity {
@@ -36,68 +36,27 @@ public class MainActivity extends AppCompatActivity {
     public double[] readings = new double[arraySize];
     public double[] rollingAvs = new double[arraySize];
     public Date[] readDates = new Date[arraySize];
-    SimpleDateFormat ddmmFormat = new SimpleDateFormat("dd/MM/yyyy");
+    RAData raData;
 
-    public void loadData() {
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        rollingNumber = Integer.parseInt(preferences.getString("rolling_number", "7"));
-        decimalPlaces = Integer.parseInt(preferences.getString("decimal_places", "2"));
-        numberToDisplay = Integer.parseInt(preferences.getString("number_to_display", "7"));
-
-          SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-          for (int i = 0; i < arraySize; i++) {
-              readings[i] = Double.valueOf(sp.getString("Weight" + i, "0"));
-              readDates[i] = Utils.convertStringToDate(sp.getString("readDates" + i, "0"));
-          }
-    }
-
-    public void saveData() {
-        SharedPreferences sp = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        for (int i = 0; i < arraySize; i++) {
-            editor.putString("Weight" + i, Double.toString(readings[i]));
-            editor.putString("readDates" + i, ddmmFormat.format(readDates[i]));
-        }
-        editor.commit();
-    }
-/*
-    public void calcAvs() {
-
-        double multiplier = Math.pow(10, decimalPlaces);
-        int startIndex = arraySize - rollingNumber;
-
-        for (int i = startIndex; i >= 0; i--) {
-
-            rollingAverage = 0;
-
-            for (int j = i; j < i + rollingNumber; j++) {
-                rollingAverage = rollingAverage + readings[j];
-            }
-
-            rollingAverage = Math.round((rollingAverage / rollingNumber) * multiplier);
-            rollingAverage = rollingAverage / multiplier;
-            rollingAvs[i] = rollingAverage;
-
-        }
-
-    }
-*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadData();
+        raData = new RAData(rollingAverage, rollingNumber, decimalPlaces, numberToDisplay, readings, rollingAvs, readDates);
+        raData.loadData(this);
+        rollingNumber = raData.rollingNumber;
+        decimalPlaces = raData.decimalPlaces;
+        numberToDisplay = raData.numberToDisplay;
+        readings = raData.readings;
+        readDates = raData.readDates;
         displayData();
     }
 
     private void displayData() {
 
-        RAData raData = new RAData(rollingAverage, rollingNumber, decimalPlaces, numberToDisplay, readings, rollingAvs);
         raData.calcAvs();
         rollingAverage = raData.rollingAverage;
-        readings = raData.readings;
         rollingAvs = raData.rollingAvs;
 
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
@@ -188,13 +147,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        saveData();
+        Utils.saveData(this, readings, readDates);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadData();
+        raData.loadData(this);
+        rollingNumber = raData.rollingNumber;
+        decimalPlaces = raData.decimalPlaces;
+        numberToDisplay = raData.numberToDisplay;
+        readings = raData.readings;
+        readDates = raData.readDates;
         displayData();
     }
 
@@ -231,6 +195,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         displayData();
-        saveData();
+        Utils.saveData(this, readings, readDates);
     }
 }
