@@ -40,7 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
                     int val = Integer.parseInt(newValue.toString());
 
                     if (val < 2 || val > 100) {
-                        Utils.showErrorMessage("Value must be between 2 and 100", getActivity());
+                        Utils.showMessage("Invalid input","Value must be between 2 and 100", getActivity());
                         return false;
                     } else {
                         return true;
@@ -54,7 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
                     int val = Integer.parseInt(newValue.toString());
 
                     if (val < 1 || val > 100) {
-                        Utils.showErrorMessage("Value must be between 1 and 100", getActivity());
+                        Utils.showMessage("Invalid input","Value must be between 1 and 100", getActivity());
                         return false;
                     } else {
                         return true;
@@ -68,7 +68,7 @@ public class SettingsActivity extends AppCompatActivity {
                     int val = Integer.parseInt(newValue.toString());
 
                     if (val < 1 || val > 5) {
-                        Utils.showErrorMessage("Value must be between 1 and 5", getActivity());
+                        Utils.showMessage("Invalid input","Value must be between 1 and 5", getActivity());
                         return false;
                     } else {
                         return true;

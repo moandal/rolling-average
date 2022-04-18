@@ -16,9 +16,9 @@ public class Utils {
 
     static int arraySize = 100;
 
-    public static void showErrorMessage(String message, Activity activity) {
+    public static void showMessage(String title, String message, Activity activity) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Invalid Input");
+        builder.setTitle(title);
         builder.setMessage(message);
         builder.setPositiveButton(android.R.string.ok, null);
         builder.show();
@@ -26,23 +26,38 @@ public class Utils {
 
     public static Date convertStringToDate(String dateString)
     {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setLenient(false);
+        Date formattedDate = new Date();
+
+        try {
+            formattedDate = sdf.parse(dateString);
+        }
+        catch(ParseException e) {
+            e.printStackTrace();
+        }
+        return formattedDate;
+    }
+
+    public static Date validateStringToDate(String dateString)
+    {
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
 
         df.setLenient(false);
-        Date formatteddate = new Date();
+        Date formattedDate = new Date();
 
         try{
-            formatteddate = df.parse(dateString);
+            formattedDate = df.parse(dateString);
         }
         catch(ParseException e){
             try{
-                formatteddate = df.parse("01/01/1900");
+                formattedDate = df.parse("01/01/1900");
             }
             catch(ParseException f){
                 f.printStackTrace();
             }
         }
-        return formatteddate;
+        return formattedDate;
     }
 
     public static void saveData(Context context, double[] readings, Date[] readDates) {

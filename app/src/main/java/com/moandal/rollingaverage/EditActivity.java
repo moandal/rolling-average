@@ -7,7 +7,6 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -23,6 +22,7 @@ public class EditActivity extends AppCompatActivity {
     double[] readings = new double[arraySize];
     double[] rollingAvs = new double[arraySize];
     Date[] readDates = new Date[arraySize];
+    DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
     EditText[] textEdRead = new EditText[arraySize];
     EditText[] textEdDate = new EditText[arraySize];
     RAData raData;
@@ -60,23 +60,14 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        raData.loadData(this);
-        rollingNumber = raData.rollingNumber;
-        decimalPlaces = raData.decimalPlaces;
-        numberToDisplay = raData.numberToDisplay;
-        readings = raData.readings;
-        readDates = raData.readDates;
-        displayData();
     }
 
     private void displayData() {
 
-        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-
-        LinearLayout linLayReading = (LinearLayout) findViewById(R.id.linLayReading);
+        LinearLayout linLayReading = findViewById(R.id.linLayReading);
         LinearLayout.LayoutParams linLayReadingparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        LinearLayout linLayDate = (LinearLayout) findViewById(R.id.linLayDate);
+        LinearLayout linLayDate = findViewById(R.id.linLayDate);
         LinearLayout.LayoutParams linLayDateparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         for (int i = 0; i < numberToDisplay; i++) {
@@ -101,8 +92,8 @@ public class EditActivity extends AppCompatActivity {
     // Performed when the Update button is clicked
     public void updateReadings(View view) {
 
-        LinearLayout linLayReading = (LinearLayout) findViewById(R.id.linLayReading);
-        LinearLayout linLayDate = (LinearLayout) findViewById(R.id.linLayDate);
+        LinearLayout linLayReading = findViewById(R.id.linLayReading);
+        LinearLayout linLayDate = findViewById(R.id.linLayDate);
         String textValue;
         EditText editText;
         double inputValue;
@@ -112,16 +103,17 @@ public class EditActivity extends AppCompatActivity {
         boolean duffDates = false;
 
         for (int i = 0; i < numberToDisplay; i++) {
-            editText = (EditText) linLayReading.findViewById(i);
+            editText = linLayReading.findViewById(i);
             textValue = editText.getText().toString();
             inputValue = Double.valueOf(textValue);
             readings[i] = inputValue;
 
-            editText = (EditText) linLayDate.findViewById(i);
+            editText = linLayDate.findViewById(i);
             textValue = editText.getText().toString();
-            inputDate = Utils.convertStringToDate(textValue);
+            inputDate = Utils.validateStringToDate(textValue);
             if (inputDate.equals(defaultDate)) {
                 duffDates = true;
+                editText.setText(df.format(readDates[i]));
             }
             else {
                 readDates[i] = inputDate;
@@ -129,9 +121,9 @@ public class EditActivity extends AppCompatActivity {
         }
 
         if (duffDates)
-            Utils.showErrorMessage("Invalid date(s) ignored", this);
+            Utils.showMessage("Invalid input","Invalid date(s) ignored", this);
         else
-            Toast.makeText(this, "Data updated", Toast.LENGTH_LONG).show();
+            Utils.showMessage("Input accepted","Data updated", this);
 
         RAData raData = new RAData(rollingAverage, rollingNumber, decimalPlaces, numberToDisplay, readings, rollingAvs, readDates);
         raData.calcAvs();

@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 
 import java.util.Date;
 
-public class RAData //extends AppCompatActivity
+public class RAData
 {
 
     double rollingAverage;
@@ -61,6 +61,7 @@ public class RAData //extends AppCompatActivity
             readings[i] = Double.valueOf(sp.getString("Weight" + i, "0"));
             readDates[i] = Utils.convertStringToDate(sp.getString("readDates" + i, "0"));
         }
+
     }
 
 }

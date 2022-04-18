@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,9 +17,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-//Todo Option to export data to a file
 //Todo Dark theme
-//Todo Improve Edit activity so that invalid dates are reset to what they were after clicking the Update button
+//Todo Option to export data to a file
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         numberToDisplay = raData.numberToDisplay;
         readings = raData.readings;
         readDates = raData.readDates;
+
         displayData();
     }
 
@@ -59,14 +60,14 @@ public class MainActivity extends AppCompatActivity {
         String Hav1 = Double.toString(rollingAvs[0]);
         String HDt1 = df.format(readDates[0]);
 
-        TextView textHist1 = (TextView) findViewById(R.id.textHist1);
-        TextView textHAv1 = (TextView) findViewById(R.id.textHAv1);
-        TextView textHDt1 = (TextView) findViewById(R.id.textHDt1);
-        TextView textAverage = (TextView) findViewById(R.id.textAverage);
+        TextView textHist1 = findViewById(R.id.textHist1);
+        TextView textHAv1 = findViewById(R.id.textHAv1);
+        TextView textHDt1 = findViewById(R.id.textHDt1);
+        TextView textAverage = findViewById(R.id.textAverage);
 
         for (int i = 1; i < numberToDisplay; i++) {
-            Hist1 += "\n" + Double.toString(readings[i]);
-            Hav1 += "\n" + Double.toString(rollingAvs[i]);
+            Hist1 += "\n" + readings[i];
+            Hav1 += "\n" + rollingAvs[i];
             HDt1 += "\n" + df.format(readDates[i]);
             if (i == rollingNumber - 1) {
                 Hist1 += "\n---";
@@ -147,13 +148,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        raData.loadData(this);
-        rollingNumber = raData.rollingNumber;
-        decimalPlaces = raData.decimalPlaces;
-        numberToDisplay = raData.numberToDisplay;
-        readings = raData.readings;
-        readDates = raData.readDates;
-        displayData();
     }
 
     // Called when the user clicks the Enter button
