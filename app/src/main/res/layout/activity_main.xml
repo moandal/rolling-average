@@ -29,14 +29,15 @@
         android:textSize="20sp" />
 
     <EditText
+        android:id="@+id/editWeight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="6"
-        android:id="@+id/editWeight"
         android:layout_below="@+id/textAverage"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:ems="6"
+        android:hint="Enter value to be averaged"
+        android:inputType="numberDecimal" />
 
     <Button
         android:layout_width="wrap_content"

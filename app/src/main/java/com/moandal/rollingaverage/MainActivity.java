@@ -17,8 +17,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-//Todo Dark theme
+//Todo convert to Kotlin
 //Todo Option to export data to a file
+//Todo Keep track of more than one average
+//Todo Average blood pressure
 
 public class MainActivity extends AppCompatActivity {
 
